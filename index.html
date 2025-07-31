@@ -98,23 +98,19 @@
     }
 
     // 4. Incognito/Private mode detection (basic)
-    async function detectIncognito() {
-      try {
-        await new Promise((res, rej) => {
-          const fs = window.RequestFileSystem || window.webkitRequestFileSystem;
-          if (!fs) return res(false);
-          fs(window.TEMPORARY, 100, () => res(false), () => res(true));
-        });
-      } catch {
-        return false;
-      }
-    }
 
-    // 5. DNT
-    function getDNT() {
-      const dnt = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
-      return (dnt === '1' || dnt === 'yes') ? 'Yes' : 'No';
+async function detectIncognito() {
+  if (navigator.storage && navigator.storage.estimate) {
+    try {
+      const { quota } = await navigator.storage.estimate();
+      // If quota is unusually low, it's likely incognito
+      return quota < 120 * 1024 * 1024;
+    } catch {
+      return false;
     }
+  }
+  return false;
+}
 
     // 6. Motion sensor support
     function motionSupport() {
@@ -252,5 +248,14 @@
       });
     });
   </script>
+
+<p>
+  2025		19	15	11	26	1.36	0.78	0.57
+
+</p>>
+
+
 </body>
+
+
 </html>
