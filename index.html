@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>My Website</title>
+    <title>Dynamic Greeting</title>
 </head>
 <body>
 
@@ -9,11 +9,22 @@
 
 <p id="date"></p>
 
-<p>hi CAE please hire me</p>
+<h2 id="greeting"></h2>
 
 <script>
+    // Show date
     var today = new Date();
     document.getElementById("date").innerHTML = today.toDateString();
+
+    // Get text after the slash
+    var path = window.location.pathname.substring(1);
+
+    if (path === "") {
+        path = "visitor";
+    }
+
+    document.getElementById("greeting").innerHTML =
+        "hi " + path + " please hire me";
 </script>
 
 </body>
